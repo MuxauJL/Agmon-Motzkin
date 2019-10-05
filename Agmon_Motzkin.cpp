@@ -3,19 +3,19 @@
 double Agmon_Motzkin::check_limitation(size_t index, const std::vector<double>& x)
 {
 	double result = 0;
-	for (size_t c = 0; c < A.get_width(); ++c)
-		result += A.get(index, c) * x[c];
-	return result - b[index];
+	for (size_t c = 0; c < A->get_width(); ++c)
+		result += A->get(index, c) * x[c];
+	return result - b->get(index);
 }
 
 std::vector<double> Agmon_Motzkin::next_x()
 {
 	bool is_solved = true;
 	std::vector<size_t> indexes;
-	for (size_t i = 0; i < A.get_heigth(); ++i) {
+	for (size_t i = 0; i < A->get_height(); ++i) {
 		if (check_limitation(i, x) < 0) {
 			is_solved = false;
-			indexes.push_back(i);
+			indexes.emplace_back(i);
 		}
 	}
 	if (is_solved)
@@ -23,8 +23,8 @@ std::vector<double> Agmon_Motzkin::next_x()
 
 	auto sum_of_squares = [this](size_t index) {
 		double result = 0;
-		for (size_t c = 0; c < A.get_width(); ++c) {
-			double a = A.get(index, c);
+		for (size_t c = 0; c < A->get_width(); ++c) {
+			double a = A->get(index, c);
 			result += a * a;
 		}
 		return result;
@@ -41,6 +41,6 @@ std::vector<double> Agmon_Motzkin::next_x()
 	}
 
 	for (size_t c = 0; c < x.size(); ++c)
-		x[c] += max * A.get(index_of_max, c);
+		x[c] += max * A->get(index_of_max, c);
 	return x;
 }

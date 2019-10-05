@@ -6,6 +6,7 @@ using position = std::pair<size_t, size_t>;
 class Matrix_Sparse
 {
 private:
+	// position from (1, 1)
 	std::map<position, double> matrix;
 	size_t height;
 	size_t width;
@@ -22,6 +23,6 @@ public:
 	void set(size_t row, size_t col, double val);
 	double get(size_t row, size_t col);
 	size_t get_width() { return width; }
-	size_t get_heigth() { return height; }
+	size_t get_height() { return height; }
 };
 
