@@ -1,8 +1,5 @@
 #include <iostream>
 #include "Agmon_Motzkin.h"
-//#include <iterator>
-//#include "Blend_Parser.h"
-//#include <memory>
 #include "MPS_Parser.h"
 
 int main() {
@@ -37,30 +34,54 @@ int main() {
 	//	std::cout << "\n";
 	//}
 
+	auto distance = [](const std::vector<double>& v1, const std::vector<double>& v2) {
+		if (v1.size() != v2.size())
+			throw std::invalid_argument("Different sizes of vectors");
+		double result = 0;
+		for (size_t i = 0; i < v1.size(); ++i) {
+			double tmp = v1[i] - v2[i];
+			result += tmp * tmp;
+		}
+		return sqrt(result);
+	};
 	MPS_Parser parser;
 	std::unique_ptr<Linear_Programming_Task> Abc =
 		std::unique_ptr<Linear_Programming_Task>(parser.parse("netlib\\BLEND.SIF"));//AFIRO
 	Agmon_Motzkin task(std::move(Abc));
-	std::vector<double> x(task.get_width(), 1);
+	std::vector<double> x(task.get_width(), 10);
 	task.set_x(x);
-	for (size_t i = 0; i < 100000; ++i) {
-		bool solved = true;
+	constexpr double E = 0.0001;
+	constexpr size_t N = 10000;
+	//bool solved = false;
+	size_t count = 0;
+	double d;
+	do{
+		auto current_x = task.get_x();
+		d = distance(current_x, task.next_x());
+		++count;
+		//solved = true;
 		x = task.next_x();
 		/*for (size_t j = 1; j <= task.get_height(); ++j)
-			if (task.check_limitation(j, task.get_x()) < -0.5)
-				solved = false;
-		std::cout << solved;*/
-	}
-	std::cout << "\n";
+			if (task.check_limitation(j, task.get_x()) < 0-E)
+				solved = false;*/
+	} while (count < N&& d>E);
+	std::cout << count<<"\n";
 	double min = INT_MAX;
 	for (size_t j = 1; j <= task.get_height(); ++j) {
-		auto lim = task.check_limitation(j, task.get_x());
+		auto lim = task.check_limitation(j);
 		if (min > lim)
 			min = lim;
 	}
 	std::cout << min << " \n";
-	/*for (auto x : task.get_x())
-		std::cout << x << " ";*/
+	
+	for (auto x : task.get_x())
+		std::cout << x << " ";
+
+	std::cout << "\n";
+	double k1 = 100;
+	double k2 = k1 / 2;
+	double current_criterion = task.get_criterion();
+	std::cout << current_criterion;
 	system("pause");
 	return 0;
 }

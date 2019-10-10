@@ -1,6 +1,6 @@
-#include "Matrix_Sparse.h"
+#include "Matrix_Sparse_Map.h"
 
-void Matrix_Sparse::set(size_t row, size_t col, double val)
+void Matrix_Sparse_Map::set(size_t row, size_t col, double val)
 {
 	if (row > height)
 		height = row;
@@ -9,7 +9,7 @@ void Matrix_Sparse::set(size_t row, size_t col, double val)
 	matrix[position(row, col)] = val;
 }
 
-double Matrix_Sparse::get(size_t row, size_t col)
+double Matrix_Sparse_Map::get(size_t row, size_t col)
 {
 	if (row > height || col > width)
 		matrix.at(position(row, col));

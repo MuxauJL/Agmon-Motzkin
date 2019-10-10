@@ -20,7 +20,7 @@ public:
 			length = pos;
 		vector[pos] = val;
 	}
-	double get(size_t pos) {
+	double get(size_t pos) const {
 		if (pos > length)
 			vector.at(pos);
 		else {
