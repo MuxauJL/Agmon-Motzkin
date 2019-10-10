@@ -10,28 +10,35 @@ double Agmon_Motzkin::check_limitation(size_t index, const std::vector<double>* 
 	return result - b->get(index);
 }
 
-double Agmon_Motzkin::get_criterion(const std::vector<double>* x)
+double Agmon_Motzkin::calculate_criterion(const std::vector<double>* x)
 {
 	if (x == nullptr)
 		x = &this->x;
 	double result = 0;
 	for (size_t i = 1; i <= A->get_width(); ++i)
 		result += c->get(i) * (*x)[i - 1];
+	if (best_criterion > result) {
+		best_criterion = result;
+		record = *x;
+	}
 	return result;
 }
 
-std::vector<double> Agmon_Motzkin::next_x()
+void Agmon_Motzkin::next_x()
 {
 	bool is_solved = true;
 	std::vector<size_t> indexes;
+	std::vector<double> limitations(A->get_height());
 	for (size_t i = 1; i <= A->get_height(); ++i) {
-		if (check_limitation(i) < 0) {
+		double lim = check_limitation(i);
+		if (lim < 0) {
 			is_solved = false;
-			indexes.emplace_back(i);
+			limitations[i - 1] = lim;
+			indexes.push_back(i);
 		}
 	}
 	if (is_solved)
-		return x;
+		return;
 
 	auto sum_of_squares = [this](size_t index) {
 		double result = 0;
@@ -43,9 +50,9 @@ std::vector<double> Agmon_Motzkin::next_x()
 	};
 
 	size_t index_of_max = indexes[0];
-	double max = -check_limitation(index_of_max) / sum_of_squares(index_of_max);
+	double max = -limitations[index_of_max - 1] / sum_of_squares(index_of_max);
 	for (size_t i = 1; i < indexes.size(); ++i) {
-		double result = -check_limitation(indexes[i]) / sum_of_squares(indexes[i]);
+		double result = -limitations[indexes[i] - 1] / sum_of_squares(indexes[i]);
 		if (max < result) {
 			max = result;
 			index_of_max = indexes[i];
@@ -54,13 +61,24 @@ std::vector<double> Agmon_Motzkin::next_x()
 
 	for (size_t i = 1; i <= A->get_width(); ++i)
 		x[i - 1] += max * A->get(index_of_max, i);
-	return x;
+	return;
 }
 
-void Agmon_Motzkin::add_limitation(const Vector_Sparse& lim)
+void Agmon_Motzkin::add_limitation(const Vector_Sparse& lim, const double b)
 {
 	size_t row = A->get_height() + 1;
 	for (size_t i = 1; i <= A->get_width(); ++i) {
 		A->set(row, i, lim.get(i));
 	}
+	this->b->set(row, b);
+}
+
+double Agmon_Motzkin::get_biggest_violation() {
+	double min = INT_MAX;
+	for (size_t j = 1; j <= A->get_height(); ++j) {
+		auto lim = check_limitation(j);
+		if (min > lim)
+			min = lim;
+	}
+	return min;
 }

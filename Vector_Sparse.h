@@ -18,7 +18,8 @@ public:
 	void set(size_t pos, double val) {
 		if (pos > length)
 			length = pos;
-		vector[pos] = val;
+		if (val != 0.0)
+			vector[pos] = val;
 	}
 	double get(size_t pos) const {
 		if (pos > length)

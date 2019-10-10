@@ -77,10 +77,10 @@ public:
 						sstr >> value;
 						if (is_contains(E, row)) {
 							Abc->A->set(row, col, value);
-							Abc->A->set(row + 1, col, -1 * value);
+							Abc->A->set(row + 1, col, -value);
 						}
 						if (is_contains(L, row))
-							Abc->A->set(row, col, -1 * value);
+							Abc->A->set(row, col, -value);
 						if (is_contains(G, row))
 							Abc->A->set(row, col, value);
 					}
@@ -100,10 +100,10 @@ public:
 					sstr >> value;
 					if (is_contains(E, row)) {
 						Abc->b->set(row, value);
-						Abc->b->set(row + 1, -1 * value);
+						Abc->b->set(row + 1, -value);
 					}
 					if (is_contains(L, row))
-						Abc->b->set(row, -1 * value);
+						Abc->b->set(row, -value);
 					if (is_contains(G, row))
 						Abc->b->set(row, value);
 				}
