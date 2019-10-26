@@ -1,4 +1,5 @@
 #include "Agmon_Motzkin.h"
+#include <omp.h>
 
 double Agmon_Motzkin::check_limitation(size_t index, const std::vector<double>* x)
 {
@@ -29,12 +30,14 @@ void Agmon_Motzkin::next_x()
 	bool is_solved = true;
 	std::vector<size_t> indexes;
 	std::vector<double> limitations(A->get_height());
-	for (size_t i = 1; i <= A->get_height(); ++i) {
-		double lim = check_limitation(i);
-		if (lim < 0) {
+#pragma omp parallel for
+	for (int i = 1; i <= A->get_height(); ++i) 
+		limitations[i - 1] = check_limitation(i);
+	
+	for (size_t i = 0; i < limitations.size();++i) {
+		if (limitations[i] < 0) {
 			is_solved = false;
-			limitations[i - 1] = lim;
-			indexes.push_back(i);
+			indexes.push_back(i + 1);
 		}
 	}
 	if (is_solved)

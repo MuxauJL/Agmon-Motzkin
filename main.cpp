@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Agmon_Motzkin.h"
 #include "MPS_Parser.h"
+#include <omp.h>
 
 double get_distance(const std::vector<double>& v1, const std::vector<double>& v2) {
 	if (v1.size() != v2.size())
@@ -111,6 +112,7 @@ int main() {
 	//	std::cout << "\n";
 	//}
 
+	//omp_set_num_threads(4);
 	MPS_Parser parser;
 	std::unique_ptr<Linear_Programming_Task> Abc =
 		std::unique_ptr<Linear_Programming_Task>(parser.parse("netlib\\BLEND.SIF"));//BLEND,OSA-60,CRE-B,AFIRO
