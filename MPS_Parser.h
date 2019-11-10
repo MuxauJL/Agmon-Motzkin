@@ -90,7 +90,7 @@ public:
 				if (line == "")
 					continue;
 				std::stringstream sstr(line);
-				//sstr >> line; //name
+				sstr >> line; //name
 				while (sstr >> line) {
 					auto it = rows.find(line);
 					if (it != rows.end())

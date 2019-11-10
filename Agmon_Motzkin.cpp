@@ -6,8 +6,8 @@ double Agmon_Motzkin::check_limitation(size_t index, const std::vector<double>* 
 	if (x == nullptr)
 		x = &this->x;
 	double result = 0;
-	for (size_t i = 1; i <= A->get_width(); ++i)
-		result += A->get(index, i) * (*x)[i - 1];
+	for (auto it = A->begin(index); it != A->end(index); ++it)
+		result += it->second * (*x)[it->first - 1];
 	return result - b->get(index);
 }
 
@@ -16,8 +16,8 @@ double Agmon_Motzkin::calculate_criterion(const std::vector<double>* x)
 	if (x == nullptr)
 		x = &this->x;
 	double result = 0;
-	for (size_t i = 1; i <= A->get_width(); ++i)
-		result += c->get(i) * (*x)[i - 1];
+	for (auto it = c->begin(); it != c->end(); ++it)
+		result += it->second * (*x)[it->first - 1];
 	if (best_criterion > result) {
 		best_criterion = result;
 		record = *x;
@@ -45,8 +45,8 @@ void Agmon_Motzkin::next_x()
 
 	auto sum_of_squares = [this](size_t index) {
 		double result = 0;
-		for (size_t i = 1; i <= A->get_width(); ++i) {
-			double a = A->get(index, i);
+		for (auto it = A->begin(index); it != A->end(index); ++it) {
+			double a = it->second;
 			result += a * a;
 		}
 		return result;
@@ -62,8 +62,8 @@ void Agmon_Motzkin::next_x()
 		}
 	}
 
-	for (size_t i = 1; i <= A->get_width(); ++i)
-		x[i - 1] += max * A->get(index_of_max, i);
+	for (auto it = A->begin(index_of_max); it != A->end(index_of_max); ++it)
+		x[it->first - 1] += max * it->second;
 	return;
 }
 

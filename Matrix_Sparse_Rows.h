@@ -25,5 +25,7 @@ public:
 	double get(size_t row, size_t col);
 	size_t get_width() { return width; }
 	size_t get_height() { return height; }
+	virtual std::map<size_t, double>::iterator begin(size_t row) { return matrix[row - 1].begin(); }
+	virtual std::map<size_t, double>::iterator end(size_t row) { return matrix[row - 1].end(); }
 };
 

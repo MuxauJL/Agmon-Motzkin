@@ -34,5 +34,8 @@ public:
 	}
 	size_t get_length(){ return length; }
 	void set_length(size_t l) { length = l; }
+	auto begin() { return vector.begin(); }
+	auto end() { return vector.end(); }
+	
 };
 

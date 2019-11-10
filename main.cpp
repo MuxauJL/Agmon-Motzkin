@@ -118,17 +118,19 @@ int main() {
 	ClpSimplex model;
 	auto& A = Abc->A;
 	auto& c = Abc->c;
+	size_t height = A->get_height();
+	size_t width = A->get_width();
 	std::vector<double> rowLower;
 	std::vector<double> objective;
-	for (size_t i = 1; i <= c->get_length(); ++i) {
+	for (size_t i = 1; i <= width; ++i) {
 		objective.push_back(c->get(i));
 	}
 	CoinPackedMatrix  matrix;
-	matrix.setDimensions(A->get_height(), A->get_width());
-	for (size_t r = 1; r <= A->get_height(); ++r) {
+	matrix.setDimensions(height, width);
+	for (size_t r = 1; r <= height; ++r) {
 		//std::cout << '\n';
 		rowLower.push_back(Abc->b->get(r));
-		for (size_t c = 1; c <= A->get_width(); ++c) {
+		for (size_t c = 1; c <= width; ++c) {
 			matrix.modifyCoefficient(r - 1, c - 1, A->get(r, c));
 			//std::cout << A->get(r, c) << ":" << matrix.getCoefficient(r - 1, c - 1) << " ";
 		}
@@ -139,18 +141,99 @@ int main() {
 	model.loadProblem(matrix, colLower.data(), colUpper.data(),
 		objective.data(), rowLower.data(), rowUpper.data());
 	model.setOptimizationDirection(1);
-	model.primal();
 
-	auto mat = model.matrix();
-	for (size_t r = 1; r <= A->get_height(); ++r) {
-		for (size_t c = 1; c <= A->get_width(); ++c) {
+	/*auto mat = model.matrix();
+	for (size_t r = 1; r <= height; ++r) {
+		for (size_t c = 1; c <= width; ++c) {
 			std::cout << mat->getCoefficient(r - 1, c - 1) << " ";
 		}
 		std::cout <<'|'<<model.getRowLower()[r-1]<< '\n';
+	}*/
+	Agmon_Motzkin task(std::move(Abc));
+	// x[i]>=0, i=1,...,n
+	for (size_t i = 1; i <= width; ++i) {
+		Vector_Sparse lim;
+		lim.set(i, 1);
+		lim.set_length(width);
+		task.add_limitation(lim);
 	}
+	std::vector<double> x(width, 0);
+	task.set_x(x);
+	constexpr double E = 0/*.000001*/;
+	constexpr size_t N = 1000000;
+	auto [count, distance] = iterate(N, E, task);
+	std::cout << "Count = " << count << "\n";
+	std::cout << "Distance = " << distance << "\n";
+	std::cout << "Biggest violation = " << task.get_biggest_violation() << " \n";
+	double upper_bound = task.calculate_criterion();
+	std::cout << "Upper bound = " << upper_bound << "\n\n";
+
+	/*double k1 = 1000;
+	double k2 = 0;
+	k1 = 580;
+	k2 = 570;
+	double upper_bound = task.calculate_criterion();
+	std::cout << "Upper bound = " << upper_bound << "\n\n";
+	upper_bound = task.calculate_criterion();
+	auto criterion = task.get_criterion();
+	task.add_limitation(criterion, upper_bound - k1);
+
+	for (size_t i = 1; i <= criterion.get_length(); ++i) {
+		auto current = criterion.get(i);
+		if (current != 0.0)
+			criterion.set(i, -current);
+	}
+	task.add_limitation(criterion, -upper_bound + k2);
+
+	do {
+		auto [count, distance] = iterate(N, E, task);
+		std::cout << "Count = " << count << "\n";
+		std::cout << "Distance = " << distance << "\n";
+		std::cout << "k1 = " << k1 << ", k2 = " << k2 << std::endl;
+		std::cout << "Criterion = " << task.calculate_criterion() << '\n';
+		auto biggest_violation = task.get_biggest_violation();
+		std::cout << "Biggest violation = " << biggest_violation << " \n";
+		if (distance <= E) {
+			k2 += (k1 - k2) / 2;
+		}
+		else {
+			k1 = k2;
+			k2 = 0;
+		}
+		size_t row = task.get_height();
+		task.set_b(row - 1, upper_bound - k1);
+		task.set_b(row, -upper_bound + k2);
+	} while (k1 - k2 > 1);*/
+
+	ClpSolve solvectl;
+	solvectl.setSolveType(ClpSolve::usePrimal);
+	solvectl.setPresolveType(ClpSolve::presolveOff);
+	auto model_copy = model;
+	auto clone = model;
+	model.setLogLevel(1);
+	/*for (int i = 8; i < 9; ++i) {
+		model = clone;
+		model.setMaximumIterations(i+1);*/
+		//model.setColSolution(task.get_x().data());
+		//model.setMaximumIterations(5);
+		model.initialSolve(solvectl);
+	//}
+	std::cout << '\n';
+	auto solution = model.getColSolution();
+	/*for (int i = 8; i < 9; ++i) {
+		model_copy = clone;*/
+		model_copy.setColSolution(/*solution*/task.get_x().data());
+		//model_copy.setMaximumIterations(i + 1);
+		//model.setColSolution(task.get_x().data());
+		//model.setMaximumIterations(5);
+		model_copy.initialSolve(solvectl);
+	//}
+	//model_copy.setColSolution(solution/*task.get_x().data()*/);
+	//model_copy.setLogLevel(1);
+	//model_copy.initialSolve();
+	std::cout << '\n' << model_copy.getIterationCount() << '\n';
 	
 
-	//omp_set_num_threads(4);
 	//MPS_Parser parser;
 	//std::unique_ptr<Linear_Programming_Task> Abc =
 	//	std::unique_ptr<Linear_Programming_Task>(parser.parse("netlib\\AFIRO.SIF"));//BLEND,OSA-60,CRE-B,AFIRO
