@@ -1,0 +1,51 @@
+Count = 1753
+Distance = 6.82203e-09
+Biggest violation = -2.82284e-07
+Upper bound = 127.212
+
+Count = 49380
+Distance = 9.99188e-09
+k1 = 1000, k2 = 400
+Criterion = -272.788
+Biggest violation = -9.83826e-07
+
+TOLERANCE:
+primal:1e-06
+dual:1e-06
+presolve:1e-08
+
+model:
+Clp0000I Optimal - objective value -464.75314
+Iterations count: 19
+
+model_copy:
+Clp0029I End of values pass after 16 iterations
+Clp0000I Optimal - objective value -464.75314
+
+model_initial_solve:
+Coin0506I Presolve 16 (-19) rows, 18 (-14) columns and 67 (-50) elements
+Clp0000I Optimal - objective value -464.75314
+Coin0511I After Postsolve, objective -464.75314, infeasibilities - dual 0 (0), primal 0 (0)
+Clp0032I Optimal objective -464.7531429 - 9 iterations time 0.002, Presolve 0.00
+
+model_copy_initial_solve:
+Coin0506I Presolve 16 (-19) rows, 18 (-14) columns and 67 (-50) elements
+Clp0029I End of values pass after 10 iterations
+Clp0000I Optimal - objective value -464.75314
+Coin0511I After Postsolve, objective -464.75314, infeasibilities - dual 0 (0), primal 0 (0)
+Clp0032I Optimal objective -464.7531429 - 10 iterations time 0.002, Presolve 0.00
+
+model_with_presolving:
+Coin0506I Presolve 32 (-3) rows, 31 (-1) columns and 112 (-5) elements
+Coin0505I Presolved problem not optimal, resolve after postsolve
+Coin0511I After Postsolve, objective 0, infeasibilities - dual 1.7999996 (4), primal 43.999999 (1)
+Clp0000I Optimal - objective value -464.75314
+Iterations count: 19
+
+model_copy_with_presolving:
+Coin0506I Presolve 32 (-3) rows, 31 (-1) columns and 112 (-5) elements
+Coin0505I Presolved problem not optimal, resolve after postsolve
+Coin0511I After Postsolve, objective -272.78826, infeasibilities - dual 1.799996 (4), primal 0 (0)
+-272.788 dual 1.7071(4) Primal 0(0)
+Clp0029I End of values pass after 15 iterations
+Clp0000I Optimal - objective value -464.75314

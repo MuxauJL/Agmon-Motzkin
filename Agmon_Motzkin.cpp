@@ -32,7 +32,7 @@ void Agmon_Motzkin::next_x()
 	std::vector<double> limitations(A->get_height());
 #pragma omp parallel for
 	for (int i = 1; i <= A->get_height(); ++i) 
-		limitations[i - 1] = check_limitation(i);
+		limitations[i - 1] = check_limitation(i);	
 	
 	for (size_t i = 0; i < limitations.size();++i) {
 		if (limitations[i] < 0) {

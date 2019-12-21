@@ -1,0 +1,74 @@
+Count = 791732
+Distance = 9.8746e-10
+Biggest violation = -3.65329e-06
+Upper bound = 6.65127
+
+Count = 9244502
+Distance = 9.94767e-10
+k1 = 50, k2 = 20
+Criterion = -13.3487
+Biggest violation = -4.61032e-06
+
+TOLERANCE:
+primal:1e-06
+dual:1e-06
+presolve:1e-08
+
+model:
+Clp0006I 0  Obj 0 Dual inf 62.471291 (7)
+Clp0006I 47  Obj -8.2833021e-10 Dual inf 48.873496 (27)
+Clp0006I 78  Obj -17.371789 Dual inf 51.276579 (23)
+Clp0006I 104  Obj -30.81215
+Clp0000I Optimal - objective value -30.81215
+
+model_copy:
+Clp0006I 0  Obj -13.348734 Primal inf 7.318418e-07 (3) Dual inf 6.2132868e+10 (35)
+Clp0006I 31  Obj -13.389285 Primal inf 1.1493439e-08 (1) Dual inf 1.9606038e+11 (40)
+Clp0029I End of values pass after 58 iterations
+Clp0006I 58  Obj -21.052322 Dual inf 49.304923 (25)
+Clp0006I 81  Obj -30.81215
+Clp0000I Optimal - objective value -30.81215
+
+model_initial_solve:
+Coin0506I Presolve 113 (-4) rows, 82 (-1) columns and 781 (-8) elements
+Clp0006I 0  Obj 0 Dual inf 54.561105 (8)
+Clp0006I 46  Obj -6.0764447e-10 Dual inf 84.419324 (23)
+Clp0006I 77  Obj -21.189658 Dual inf 18.130072 (14)
+Clp0006I 98  Obj -30.81215
+Clp0000I Optimal - objective value -30.81215
+Coin0511I After Postsolve, objective -30.81215, infeasibilities - dual 0 (0), primal 0 (0)
+Clp0032I Optimal objective -30.81214987 - 98 iterations time 0.012, Presolve 0.00
+
+model_copy_initial_solve:
+Coin0506I Presolve 113 (-4) rows, 82 (-1) columns and 781 (-8) elements
+Clp0006I 0  Obj -13.348734 Primal inf 5.8111523e-07 (3) Dual inf 5.9863112e+10 (36)
+Clp0006I 31  Obj -13.389285 Primal inf 1.1493432e-08 (1) Dual inf 1.6914873e+11 (36)
+Clp0029I End of values pass after 57 iterations
+Clp0006I 57  Obj -21.052322 Dual inf 48.716911 (26)
+Clp0006I 79  Obj -30.81215
+Clp0000I Optimal - objective value -30.81215
+Coin0511I After Postsolve, objective -30.81215, infeasibilities - dual 0 (0), primal 0 (0)
+Clp0032I Optimal objective -30.81214985 - 79 iterations time 0.012, Presolve 0.00
+
+model_with_presolving:
+Coin0506I Presolve 113 (-4) rows, 82 (-1) columns and 781 (-8) elements
+Coin0505I Presolved problem not optimal, resolve after postsolve
+Coin0511I After Postsolve, objective 0, infeasibilities - dual 30.249999 (8), primal 0 (0)
+Clp0006I 0  Obj 0 Dual inf 56.028954 (8)
+Clp0006I 46  Obj -8.1879952e-10 Dual inf 48.873496 (27)
+Clp0006I 77  Obj -17.371789 Dual inf 51.276579 (23)
+Clp0006I 103  Obj -30.81215
+Clp0000I Optimal - objective value -30.81215
+
+
+model_copy_with_presolving:
+Coin0506I Presolve 113 (-4) rows, 82 (-1) columns and 781 (-8) elements
+Coin0505I Presolved problem not optimal, resolve after postsolve
+Coin0511I After Postsolve, objective -13.348734, infeasibilities - dual 33.569991 (9), primal 1.0216605e-05 (3)
+-13.3487 dual 69.0628(23) Primal 6.71399e-07(0)
+Clp0006I 0  Obj -13.348734 Primal inf 7.3184182e-07 (3) Dual inf 6.2132868e+10 (35)
+Clp0006I 31  Obj -13.389285 Primal inf 1.1493455e-08 (1) Dual inf 1.9606038e+11 (40)
+Clp0029I End of values pass after 58 iterations
+Clp0006I 58  Obj -21.052322 Dual inf 49.304923 (25)
+Clp0006I 81  Obj -30.81215
+Clp0000I Optimal - objective value -30.81215
